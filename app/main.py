@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.api.main import api_router
+from app.settings import settings
 
 app = FastAPI(
     title="Generator Service",
@@ -16,6 +18,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(api_router, prefix=settings.API_V1_STR, tags=["v1"])
 
 # Health check endpoint
 @app.get("/health")
