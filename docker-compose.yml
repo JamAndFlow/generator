@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  generator-service:
+    build: .
+    container_name: generator
+    ports:
+      - "8001:8000"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    networks:
+      - jamandflows-network
+
+networks:
+  jamandflows-network:
+    external: true

@@ -1,0 +1,9 @@
+fastapi[standard]
+uvicorn[standard]
+pydantic-settings
+SQLAlchemy~=2.0.41
+alembic~=1.16.2
+psycopg2-binary~=2.9.10
+python-dotenv
+pydantic
+pydantic-settings
