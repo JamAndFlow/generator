@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     VERSION: str = "1.0.0"
 
+    HUGGINGFACEHUB_API_TOKEN: str
 
     class Config:
         """Configuration for the settings."""

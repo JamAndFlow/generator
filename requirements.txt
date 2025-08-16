@@ -7,3 +7,12 @@ psycopg2-binary~=2.9.10
 python-dotenv
 pydantic
 pydantic-settings
+chromadb
+
+# LangChain and Hugging Face
+langchain
+langchain-huggingface
+langchain-community
+langchain_chroma
+huggingface-hub
+sentence_transformers
