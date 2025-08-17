@@ -1,7 +1,7 @@
 from langchain_core.documents import Document
 from app.pipelines.daily_question_pipeline import daily_question_chain
 from app.llm.provider import invoke_with_retries
-from app.config.vectorestore import ChromaDB
+from app.config.vectorestore import chroma_db
 
 #TODO: Make this configurable
 # This is the default user prompt for generating a daily question.
@@ -16,6 +16,5 @@ def generate_daily_question() -> str:
 
 def add_daily_question_to_store(question: str) -> None:
     """Add a daily question to the ChromaDB collection."""
-    chroma_store = ChromaDB(collection="daily_questions")
     doc = Document(page_content=question, metadata={})
-    chroma_store.add_documents([doc])
+    chroma_db.add_documents(collection="daily_questions",documents=[doc])

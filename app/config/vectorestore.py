@@ -5,31 +5,49 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.documents import Document
 from app.settings import settings
 
+# Using singleton pattern for ChromaDB to ensure a single instance is used across the application
 class ChromaDB:
-    """A wrapper for ChromaDB to handle document storage and retrieval."""
-    def __init__(self, collection: str = "daily_questions"):
+    """Singleton class for managing ChromaDB collections and operations."""
+    _instance = None  
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+    
+    def __init__(self):
         self.path = settings.CHROMA_PATH
-        self.collection = collection 
         self.model = settings.EMBEDDING_MODEL
 
         self._embeddings = HuggingFaceEmbeddings(model_name=self.model)
         self._client = PersistentClient(path=self.path)
-        self._db = Chroma(
-            client=self._client,
-            collection_name=self.collection,
-            embedding_function=self._embeddings,
-        )
+
+        self._collections: Dict[str, Chroma] = {}
     
-    def add_documents(self, documents: List[Document]) -> None:
+    def get_collection(self, name: str) -> Chroma:
+        """Get or create a Chroma-backed collection."""
+        if name not in self._collections:
+            self._collections[name] = Chroma(
+                client=self._client,
+                collection_name=name,
+                embedding_function=self._embeddings,
+            )
+        return self._collections[name]
+    
+    def add_documents(self, collection: str, documents: List[Document]) -> None:
         """
         Add documents to the ChromaDB collection.
         """
-        self._db.add_documents(documents)
+        store = self.get_collection(collection)
+        store.add_documents(documents)
     
-    def as_retriever(self, search_kwargs: Optional[Dict[str, Any]] = None) -> Any:
+    def as_retriever(self,collection: str, search_kwargs: Optional[Dict[str, Any]] = None) -> Any:
         """
         Get a retriever for the ChromaDB collection.
         search_kwargs: can be used to specify additional search parameters like 'k' for KNN.
         """
-        return self._db.as_retriever(search_kwargs=search_kwargs)
-            
+        store = self.get_collection(collection)
+        return store.as_retriever(search_kwargs=search_kwargs)
+    
+
+chroma_db = ChromaDB()

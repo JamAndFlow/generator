@@ -2,14 +2,11 @@ from typing import Dict
 from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
 from langchain_core.runnables import RunnableParallel
 from app.prompts.daily_question_prompt import system_template, human_template
-from app.config.vectorestore import ChromaDB
+from app.config.vectorestore import chroma_db
 from app.llm.provider import build_chat_model
 from app.settings import settings
 
-# Initialize the ChromaDB instance
-chroma_db = ChromaDB(collection="daily_questions")
-
-retriever = chroma_db.as_retriever(search_kwargs={"k": settings.RETRIEVE_K})
+retriever = chroma_db.as_retriever(collection="daily_questions",search_kwargs={"k": settings.RETRIEVE_K})
 
 prompt = ChatPromptTemplate.from_messages([
     SystemMessagePromptTemplate.from_template(system_template),
