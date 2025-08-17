@@ -19,6 +19,17 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     VERSION: str = "1.0.0"
 
+    HUGGINGFACEHUB_API_TOKEN: str
+    EMBEDDING_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
+    LLM_REPO_ID: str = "openai/gpt-oss-120b"
+    LLM_TEMPERATURE: float = 0.5
+    LLM_MAX_NEW_TOKENS: int = 512
+    LLM_TIMEOUT_S: int = 60  # network/inference timeout safeguard
+    LLM_RETRIES: int = 3
+
+    CHROMA_PATH: str = "/app/chroma_data"
+    # Retrieving "K" in a vector database refers to performing a K-Nearest Neighbors (KNN) search
+    RETRIEVE_K: int = 3
 
     class Config:
         """Configuration for the settings."""
