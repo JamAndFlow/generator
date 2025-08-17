@@ -16,6 +16,14 @@ done
 
 echo "Postgres is ready!"
 
+# Wait for MongoDB to be ready
+echo "Waiting for MongoDB..."
+until nc -z -v -w30 mongodb 27017; do
+  sleep 1
+done
+
+echo "MongoDB is up and running!"
+
 echo "Running Alembic migrations..."
 alembic upgrade head
 

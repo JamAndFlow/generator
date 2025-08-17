@@ -12,7 +12,19 @@ services:
       - .env
     networks:
       - jamandflows-network
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    env_file:
+      - .env
+    volumes:
+      - mongo_data:/data/db
 
 networks:
   jamandflows-network:
     external: true
+
+volumes:
+  mongo_data:

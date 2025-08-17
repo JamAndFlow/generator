@@ -1,5 +1,6 @@
 from fastapi import APIRouter
-from app.services.questions import generate_daily_question as generate_daily_question_service, add_daily_question_to_store as add_question_in_chroma_db
+from app.services.questions import generate_daily_question as generate_daily_question_service, add_daily_question_to_store as add_question_in_chroma_db, add_daily_question_to_mongodb
+
 router = APIRouter()
 
 
@@ -10,7 +11,7 @@ def generate_daily_question():
     """
     response = generate_daily_question_service()
     add_question_in_chroma_db(response)
-    # TODO: Add question into mongoDB
+    add_daily_question_to_mongodb(response)  # Store question in MongoDB
     return response
 
 @router.get("/get_daily_question")
