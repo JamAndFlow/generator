@@ -13,9 +13,12 @@ prompt = ChatPromptTemplate.from_messages([
     HumanMessagePromptTemplate.from_template(human_template),
 ])
 
-#TODO: Update to get the top 100 questions from the ChromaDB, not on users question
 def _retrieve_context(inputs: Dict):
-    docs = retriever.get_relevant_documents(inputs["user_question"])
+    """It will only trigger when user gives a contet if not it will return 'No extra context'"""
+    if inputs["user_question"] is None:
+        docs = []
+    else:
+        docs = retriever.get_relevant_documents(inputs["user_question"])
     context = " ".join([d.page_content for d in docs]) if docs else "No extra context"
     return {"context": context, "user_question": inputs["user_question"]}
 
