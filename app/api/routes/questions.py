@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.services.questions import generate_daily_question as generate_daily_question_service, add_daily_question_to_store as add_question_in_chroma_db
+from app.services.questions import generate_daily_question as generate_daily_question_service
 from app.schemas.utils import UserPrompt
 router = APIRouter()
 
@@ -11,7 +11,6 @@ def generate_daily_question(request: UserPrompt):
     or user's input.
     """
     response = generate_daily_question_service(user_prompt=request.user_prompt)
-    add_question_in_chroma_db(response)
     # TODO: Add question into mongoDB
     return response
 
@@ -21,4 +20,5 @@ def get_daily_question():
     Retrieve the most recent daily question.
     """
     #TODO: implement this endpoint
+    # Get from mongoDB
     return {"message": "This endpoint will return the most recent daily question. Not implemented yet."}

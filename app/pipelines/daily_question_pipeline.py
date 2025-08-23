@@ -13,6 +13,9 @@ prompt = ChatPromptTemplate.from_messages([
     HumanMessagePromptTemplate.from_template(human_template),
 ])
 
+#TODO: we might required a context for last n question for uniquness and variety
+# But for now the concern is on the limit of the tokens hence not implementing it
+
 def _retrieve_context(inputs: Dict):
     """It will only trigger when user gives a contet if not it will return 'No extra context'"""
     if inputs["user_question"] is None:
