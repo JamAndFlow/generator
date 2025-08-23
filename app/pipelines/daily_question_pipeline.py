@@ -6,21 +6,31 @@ from app.config.vectorestore import chroma_db
 from app.llm.provider import build_chat_model
 from app.settings import settings
 
-retriever = chroma_db.as_retriever(collection="daily_questions",search_kwargs={"k": settings.RETRIEVE_K})
+# using tech_description collection to retrieve context.
+# It will return top k relevant document based on the user prompt.
+# The context structure stores tech-stack and relevant real-world concepts 
+# On which the question can be framed.
+retriever = chroma_db.as_retriever(collection="tech_description",
+                                   search_kwargs={"k": settings.RETRIEVE_K})
 
 prompt = ChatPromptTemplate.from_messages([
     SystemMessagePromptTemplate.from_template(system_template),
     HumanMessagePromptTemplate.from_template(human_template),
 ])
 
-#TODO: Update to get the top 100 questions from the ChromaDB, not on users question
+#TODO: we might required a context for last n question for uniquness and variety
+# But for now the concern is on the limit of the tokens hence not implementing it
 def _retrieve_context(inputs: Dict):
-    docs = retriever.get_relevant_documents(inputs["user_question"])
+    """It will only trigger when user gives a contet if not it will return 'No extra context'"""
+    if inputs["user_prompt"] is None:
+        docs = []
+    else:
+        docs = retriever.get_relevant_documents(inputs["user_prompt"])
     context = " ".join([d.page_content for d in docs]) if docs else "No extra context"
-    return {"context": context, "user_question": inputs["user_question"]}
+    return {"context": context, "user_prompt": inputs["user_prompt"]}
 
 context_retriever = RunnableParallel(
-    user_question=lambda x: x["user_question"],
+    user_question=lambda x: x["user_prompt"],
     context=_retrieve_context
 )
 
