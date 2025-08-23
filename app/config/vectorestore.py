@@ -1,9 +1,12 @@
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List, Optional
+
 from chromadb import PersistentClient
 from langchain_chroma import Chroma
-from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.documents import Document
+from langchain_huggingface import HuggingFaceEmbeddings
+
 from app.settings import settings
+
 
 # Using singleton pattern for ChromaDB to ensure a single instance is used across the application
 class ChromaDB:

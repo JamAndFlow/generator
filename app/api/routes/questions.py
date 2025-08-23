@@ -1,6 +1,9 @@
 from fastapi import APIRouter
-from app.services.questions import generate_daily_question as generate_daily_question_service
+
 from app.schemas.utils import UserPrompt
+from app.services.questions import \
+    generate_daily_question as generate_daily_question_service
+
 router = APIRouter()
 
 

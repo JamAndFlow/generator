@@ -1,7 +1,10 @@
 import time
 from typing import Any, Dict
+
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
+
 from app.settings import settings
+
 
 def build_chat_model() -> ChatHuggingFace:
     """Builds and returns a ChatHuggingFace model instance configured with the settings from the app."""
