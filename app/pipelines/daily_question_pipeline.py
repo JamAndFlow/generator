@@ -6,9 +6,12 @@ from app.config.vectorestore import chroma_db
 from app.llm.provider import build_chat_model
 from app.settings import settings
 
-# TODO: change collection name, 
-# use tech_description for context, which has the tech stack specific context.
-retriever = chroma_db.as_retriever(collection="tech_description",search_kwargs={"k": settings.RETRIEVE_K})
+# using tech_description collection to retrieve context.
+# It will return top k relevant document based on the user prompt.
+# The context structure stores tech-stack and relevant real-world concepts 
+# On which the question can be framed.
+retriever = chroma_db.as_retriever(collection="tech_description",
+                                   search_kwargs={"k": settings.RETRIEVE_K})
 
 prompt = ChatPromptTemplate.from_messages([
     SystemMessagePromptTemplate.from_template(system_template),
@@ -17,7 +20,6 @@ prompt = ChatPromptTemplate.from_messages([
 
 #TODO: we might required a context for last n question for uniquness and variety
 # But for now the concern is on the limit of the tokens hence not implementing it
-
 def _retrieve_context(inputs: Dict):
     """It will only trigger when user gives a contet if not it will return 'No extra context'"""
     if inputs["user_prompt"] is None:
