@@ -2,7 +2,7 @@ from langchain_core.documents import Document
 from app.pipelines.daily_question_pipeline import daily_question_chain
 from app.llm.provider import invoke_with_retries
 from app.config.vectorestore import chroma_db
-from app.config.database import questions_collection
+from app.config.config_mongo_fb import questions_collection
 from datetime import datetime
 
 def generate_daily_question(user_prompt: str = None) -> str:
@@ -27,7 +27,7 @@ def add_daily_question_to_mongodb(question: str) -> None:
         "likes": 0,
         "dislikes": 0,
         "hints": [],
-        "tags": ["Daily", "Question"],
+        "tags": ["daily_question"],
         "difficulty": "medium",
         "status": "published"
     }
@@ -37,3 +37,20 @@ def add_tech_description_to_store(description: str, metadata: dict) -> None:
     """Add a tech description to the ChromaDB collection."""
     doc = Document(page_content=description, metadata=metadata)
     chroma_db.add_documents(collection="tech_description",documents=[doc])
+
+def get_most_recent_daily_question():
+    """Fetch the most recent daily question from MongoDB."""
+    recent_question = questions_collection.find_one(sort=[("created_at", -1)])
+    if recent_question:
+        return {
+            "id": recent_question["_id"],
+            "title": recent_question["title"],
+            "description": recent_question["description"],
+            "created_at": recent_question["created_at"],
+            "likes": recent_question["likes"],
+            "dislikes": recent_question["dislikes"],
+            "tags": recent_question["tags"],
+            "difficulty": recent_question["difficulty"],
+            "status": recent_question["status"]
+        }
+    return None
