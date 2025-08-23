@@ -12,6 +12,7 @@ services:
       - .env
     networks:
       - jamandflows-network
+
   mongodb:
     image: mongo:6.0
     container_name: mongodb
@@ -21,6 +22,8 @@ services:
       - .env
     volumes:
       - mongo_data:/data/db
+    networks:
+      - jamandflows-network
 
 networks:
   jamandflows-network:
