@@ -6,7 +6,9 @@ from app.config.vectorestore import chroma_db
 from app.llm.provider import build_chat_model
 from app.settings import settings
 
-retriever = chroma_db.as_retriever(collection="daily_questions",search_kwargs={"k": settings.RETRIEVE_K})
+# TODO: change collection name, 
+# use tech_description for context, which has the tech stack specific context.
+retriever = chroma_db.as_retriever(collection="tech_description",search_kwargs={"k": settings.RETRIEVE_K})
 
 prompt = ChatPromptTemplate.from_messages([
     SystemMessagePromptTemplate.from_template(system_template),
@@ -18,15 +20,15 @@ prompt = ChatPromptTemplate.from_messages([
 
 def _retrieve_context(inputs: Dict):
     """It will only trigger when user gives a contet if not it will return 'No extra context'"""
-    if inputs["user_question"] is None:
+    if inputs["user_prompt"] is None:
         docs = []
     else:
-        docs = retriever.get_relevant_documents(inputs["user_question"])
+        docs = retriever.get_relevant_documents(inputs["user_prompt"])
     context = " ".join([d.page_content for d in docs]) if docs else "No extra context"
-    return {"context": context, "user_question": inputs["user_question"]}
+    return {"context": context, "user_prompt": inputs["user_prompt"]}
 
 context_retriever = RunnableParallel(
-    user_question=lambda x: x["user_question"],
+    user_question=lambda x: x["user_prompt"],
     context=_retrieve_context
 )
 
