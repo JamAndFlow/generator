@@ -15,16 +15,3 @@ engine = create_engine(settings.database_url)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
-
-
-def get_db():
-    """Dependency to get a database session."""
-    db = SessionLocal()
-    try:
-        yield db
-    except Exception as e:
-        logger.error("Database error: %s", e)
-        db.rollback()
-        raise
-    finally:
-        db.close()
