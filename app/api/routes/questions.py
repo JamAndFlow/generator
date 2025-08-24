@@ -1,6 +1,12 @@
 from fastapi import APIRouter
-from app.services.questions import generate_daily_question as generate_daily_question_service, add_daily_question_to_store as add_question_in_chroma_db, add_daily_question_to_mongodb, get_most_recent_daily_question
+
 from app.schemas.utils import UserPrompt
+from app.services.questions import add_daily_question_to_mongodb
+from app.services.questions import \
+    add_daily_question_to_store as add_question_in_chroma_db
+from app.services.questions import \
+    generate_daily_question as generate_daily_question_service
+from app.services.questions import get_most_recent_daily_question
 
 router = APIRouter()
 

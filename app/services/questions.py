@@ -1,9 +1,12 @@
-from langchain_core.documents import Document
-from app.pipelines.daily_question_pipeline import daily_question_chain
-from app.llm.provider import invoke_with_retries
-from app.config.vectorestore import chroma_db
-from app.config.config_mongo_fb import questions_collection
 from datetime import datetime
+
+from langchain_core.documents import Document
+
+from app.config.config_mongo_fb import questions_collection
+from app.config.vectorestore import chroma_db
+from app.llm.provider import invoke_with_retries
+from app.pipelines.daily_question_pipeline import daily_question_chain
+
 
 def generate_daily_question(user_prompt: str = None) -> str:
     """Generate a daily question using the LLM pipeline."""

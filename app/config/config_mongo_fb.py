@@ -1,6 +1,9 @@
 from asyncio.log import logger
-from app.config.database import SessionLocal
+
 from pymongo import MongoClient
+
+from app.config.database import SessionLocal
+
 
 class MongoDB:
     def __init__(self, uri: str, db_name: str):

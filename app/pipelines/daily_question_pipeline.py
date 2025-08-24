@@ -1,9 +1,13 @@
 from typing import Dict
-from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
+
+from langchain_core.prompts import (ChatPromptTemplate,
+                                    HumanMessagePromptTemplate,
+                                    SystemMessagePromptTemplate)
 from langchain_core.runnables import RunnableParallel
-from app.prompts.daily_question_prompt import system_template, human_template
+
 from app.config.vectorestore import chroma_db
 from app.llm.provider import build_chat_model
+from app.prompts.daily_question_prompt import human_template, system_template
 from app.settings import settings
 
 # using tech_description collection to retrieve context.
