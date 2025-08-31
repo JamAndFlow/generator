@@ -10,15 +10,6 @@ app = FastAPI(
     version="0.1.0"
 )
 
-# CORS middleware configuration
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with specific origins
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 app.include_router(api_router, prefix=settings.API_V1_STR, tags=["v1"])
 
 # Health check endpoint
