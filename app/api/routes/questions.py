@@ -1,12 +1,15 @@
-from fastapi import APIRouter
 import json
 
-from app.schemas.utils import UserPrompt, TechDescription
-from app.services.questions import add_daily_question_to_mongodb
-from app.services.questions import ( 
-    generate_daily_question as generate_daily_question_service,
-    add_tech_description_to_store)
+from fastapi import APIRouter
 
+from app.schemas.utils import TechDescription, UserPrompt
+from app.services.questions import (
+    add_daily_question_to_mongodb,
+    add_tech_description_to_store,
+)
+from app.services.questions import (
+    generate_daily_question as generate_daily_question_service,
+)
 from app.services.questions import get_most_recent_daily_question
 
 router = APIRouter()
@@ -33,7 +36,9 @@ def add_tech_description(request: TechDescription):
     Add a technical description to the vector store.
     Whenever admin add a new tech description/Tag, it will be stored in ChromaDB.
     """
-    add_tech_description_to_store(description=request.description, metadata=request.metadata)
+    add_tech_description_to_store(
+        description=request.description, metadata=request.metadata
+    )
     return {"message": "Tech description added successfully."}
 
 

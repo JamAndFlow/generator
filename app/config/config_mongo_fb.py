@@ -13,6 +13,7 @@ class MongoDB:
     def get_collection(self, collection_name: str):
         return self.db[collection_name]
 
+
 # MongoDB connection setup
 MONGO_URI = "mongodb://mongodb:27017"
 MONGO_DB_NAME = "questions_db"

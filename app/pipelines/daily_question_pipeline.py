@@ -1,8 +1,10 @@
 from typing import Dict
 
-from langchain_core.prompts import (ChatPromptTemplate,
-                                    HumanMessagePromptTemplate,
-                                    SystemMessagePromptTemplate)
+from langchain_core.prompts import (
+    ChatPromptTemplate,
+    HumanMessagePromptTemplate,
+    SystemMessagePromptTemplate,
+)
 from langchain_core.runnables import RunnableParallel
 
 from app.config.vectorestore import chroma_db
@@ -12,17 +14,21 @@ from app.settings import settings
 
 # using tech_description collection to retrieve context.
 # It will return top k relevant document based on the user prompt.
-# The context structure stores tech-stack and relevant real-world concepts 
+# The context structure stores tech-stack and relevant real-world concepts
 # On which the question can be framed.
-retriever = chroma_db.as_retriever(collection="tech_description",
-                                   search_kwargs={"k": settings.RETRIEVE_K})
+retriever = chroma_db.as_retriever(
+    collection="tech_description", search_kwargs={"k": settings.RETRIEVE_K}
+)
 
-prompt = ChatPromptTemplate.from_messages([
-    SystemMessagePromptTemplate.from_template(system_template),
-    HumanMessagePromptTemplate.from_template(human_template),
-])
+prompt = ChatPromptTemplate.from_messages(
+    [
+        SystemMessagePromptTemplate.from_template(system_template),
+        HumanMessagePromptTemplate.from_template(human_template),
+    ]
+)
 
-#TODO: we might required a context for last n question for uniquness and variety
+
+# TODO: we might required a context for last n question for uniquness and variety
 # But for now the concern is on the limit of the tokens hence not implementing it
 def _retrieve_context(inputs: Dict):
     """It will only trigger when user gives a contet if not it will return 'No extra context'"""
@@ -33,9 +39,9 @@ def _retrieve_context(inputs: Dict):
     context = " ".join([d.page_content for d in docs]) if docs else "No extra context"
     return {"context": context, "user_prompt": inputs["user_prompt"]}
 
+
 context_retriever = RunnableParallel(
-    user_question=lambda x: x["user_prompt"],
-    context=_retrieve_context
+    user_question=lambda x: x["user_prompt"], context=_retrieve_context
 )
 
 chat_model = build_chat_model()
