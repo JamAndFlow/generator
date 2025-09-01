@@ -1,10 +1,8 @@
 from typing import Dict
 
-from langchain_core.prompts import (
-    ChatPromptTemplate,
-    HumanMessagePromptTemplate,
-    SystemMessagePromptTemplate,
-)
+from langchain_core.prompts import (ChatPromptTemplate,
+                                    HumanMessagePromptTemplate,
+                                    SystemMessagePromptTemplate)
 from langchain_core.runnables import RunnableParallel
 
 from app.config.vectorestore import chroma_db
