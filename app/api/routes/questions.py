@@ -3,10 +3,13 @@ import json
 from fastapi import APIRouter
 
 from app.schemas.utils import TechDescription, UserPrompt
-from app.services.questions import (add_daily_question_to_mongodb,
-                                    add_tech_description_to_store)
-from app.services.questions import \
-    generate_daily_question as generate_daily_question_service
+from app.services.questions import (
+    add_daily_question_to_mongodb,
+    add_tech_description_to_store,
+)
+from app.services.questions import (
+    generate_daily_question as generate_daily_question_service,
+)
 from app.services.questions import get_most_recent_daily_question
 
 router = APIRouter()
