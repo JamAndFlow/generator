@@ -18,6 +18,7 @@ def generate_daily_question(user_prompt: str = None) -> any:
     return response.content
 
 
+# TODO: Add error handling
 def add_daily_question_to_mongodb(question: dict) -> None:
     """Add a daily question to the MongoDB collection."""
     question_document = {
