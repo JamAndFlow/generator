@@ -36,14 +36,14 @@ class SchedulerManager:
         await execute_with_retries(
             self._generate_and_store_daily_question, max_retries=3, delay=5
         )
-
+    #TODO: need to test with 24 hour interval
     def start(self, interval_hour: int):
         """Start the scheduler and add the daily question job."""
         try:
             self.job = self.scheduler.add_job(
                 self._daily_question_task,
                 "interval",
-                minutes=1,
+                hour=24,
                 id="daily_question_job",
                 replace_existing=True,
             )
