@@ -3,10 +3,8 @@ import logging
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from app.services.questions import (
-    add_daily_question_to_mongodb,
-    generate_daily_question,
-)
+from app.services.questions import (add_daily_question_to_mongodb,
+                                    generate_daily_question)
 from app.utils.generic_functions import execute_with_retries
 
 logger = logging.getLogger(__name__)
