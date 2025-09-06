@@ -17,7 +17,8 @@ def build_chat_model() -> ChatHuggingFace:
     )
     return ChatHuggingFace(llm=llm)
 
-#TODO: Improve this function
+
+# TODO: Improve this function
 def invoke_with_retries(chain, payload: Dict[str, Any]):
     last_err = None
     for attempt in range(1, settings.LLM_RETRIES + 1):
@@ -26,5 +27,7 @@ def invoke_with_retries(chain, payload: Dict[str, Any]):
         except Exception as e:  # noqa: BLE001
             last_err = e
             # Exponential backoff with cap
-            time.sleep(min(2 ** attempt, 8))
-    raise RuntimeError(f"LLM invocation failed after {settings.LLM_RETRIES} attempts") from last_err
+            time.sleep(min(2**attempt, 8))
+    raise RuntimeError(
+        f"LLM invocation failed after {settings.LLM_RETRIES} attempts"
+    ) from last_err
