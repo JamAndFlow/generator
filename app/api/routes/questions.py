@@ -3,13 +3,13 @@ from typing import List
 
 from fastapi import APIRouter, Depends, Request
 
-from app.schemas.utils import (QuestionFilters, TechDescription, UserPrompt)
+from app.schemas.utils import QuestionFilters, TechDescription, UserPrompt
 from app.services.questions import (add_daily_question_to_mongodb,
-                                  add_tech_description_to_store,
-                                  get_question_by_id, list_questions)
+                                    add_tech_description_to_store)
 from app.services.questions import \
     generate_daily_question as generate_daily_question_service
-from app.services.questions import get_most_recent_daily_question
+from app.services.questions import (get_most_recent_daily_question,
+                                    get_question_by_id, list_questions)
 
 router = APIRouter()
 
