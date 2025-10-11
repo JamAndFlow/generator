@@ -53,40 +53,50 @@ def get_daily_question():
 
 
 @router.get("/list_questions")
-async def list_questions(
-    filters: QuestionFilters = Depends(),
-    request: Request = Depends()
+async def list_questions_endpoint(
+    request: Request,
+    page: int = 1,
+    per_page: int = 10,
+    title: str | None = None,
+    tags: str | None = None,
+    difficulty: str | None = None,
+    status: str | None = None,
+    description: str | None = None,
+    sort_by: str = "created_at",
+    sort_order: str = "desc"
 ):
     """
     Retrieve all questions with filtering and pagination support.
     
     Parameters:
-        filters: Query parameters for filtering, sorting and pagination
-            - page: Current page number (starts from 1)
-            - per_page: Number of items per page (10-100)
-            - title: Filter by title (case-insensitive partial match)
-            - tags: Filter by list of tags
-            - difficulty: Filter by difficulty level
-            - status: Filter by status
-            - description: Filter by description (case-insensitive partial match)
-            - sort_by: Field to sort by (default: created_at)
-            - sort_order: Sort order (asc/desc)
+        page: Current page number (starts from 1)
+        per_page: Number of items per page (10-100)
+        title: Filter by title (case-insensitive partial match)
+        tags: Comma-separated list of tags to filter by
+        difficulty: Filter by difficulty level
+        status: Filter by status
+        description: Filter by description (case-insensitive partial match)
+        sort_by: Field to sort by (default: created_at)
+        sort_order: Sort order (asc/desc)
     """
+    # Convert comma-separated tags string to list if provided
+    tag_list = tags.split(",") if tags else None
+    
     result = list_questions(
-        page=filters.page,
-        per_page=filters.per_page,
-        title=filters.title,
-        tags=filters.tags,
-        difficulty=filters.difficulty,
-        status=filters.status,
-        description=filters.description,
-        sort_by=filters.sort_by,
-        sort_order=filters.sort_order
+        page=page,
+        per_page=per_page,
+        title=title,
+        tags=tag_list,
+        difficulty=difficulty,
+        status=status,
+        description=description,
+        sort_by=sort_by,
+        sort_order=sort_order
     )
     
     # Generate next page URL if available
     total_pages = result["total_pages"]
-    current_page = filters.page
+    current_page = page
     
     if current_page < total_pages:
         base_url = str(request.base_url)
@@ -95,6 +105,7 @@ async def list_questions(
         result["next_page"] = f"{base_url}list_questions?{'&'.join(f'{k}={v}' for k, v in query_params.items())}"
     else:
         result["next_page"] = None
+        
     return result
 
 
