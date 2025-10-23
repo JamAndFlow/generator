@@ -44,5 +44,6 @@ Provide a valid JSON object with the following structure:
     "difficulty": "easy|medium|hard",  // Based on required knowledge depth and complexity
     "tags": ["string"],          // 3-6 relevant technical tags for categorization
     "learning_objectives": ["string"]  // 2-3 key skills/concepts the question teaches
+    "categories": ["string"]  // 1-2 broader categories the question falls under (e.g., "Web Development", "Data Structures") 
 }}
 """

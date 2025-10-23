@@ -41,7 +41,7 @@ class SchedulerManager:
             self.job = self.scheduler.add_job(
                 self._daily_question_task,
                 "interval",
-                hour=24,
+                hours=interval_hour,
                 id="daily_question_job",
                 replace_existing=True,
             )
